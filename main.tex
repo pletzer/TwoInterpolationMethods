@@ -71,7 +71,7 @@
 %Content Starts Here <-------------------------------------------------------------------------------
 \title{\LARGE{Two interpolation methods for vector fields that conseve flux and line integrals}}
 %\subtitle{Computational Science team}
-\author{Alexander Pletzer (NeSI/NIWA) and Wolfgang Hayek (NIWA/NeSI)\\
+\author{Alexander Pletzer (NeSI/NIWA), Wolfgang Hayek (NIWA/NeSI) and Samantha Adams (UK Met Office)\\
 (alexander.pletzer@nesi.org.nz) \\
  C3DIS, Canberra\\
  7 May 2019  }
@@ -127,9 +127,8 @@
 
 \begin{frame}[t]
   \frametitle{Earth science grids are curvilinear}
-  \begin{block}{How to handle non-orthogonal cells? Example: cubed-sphere grid}
+  \begin{block}{Example: cubed-sphere grid employed by exascale weather prediction/climate modelling system LFRic developed at UK Met Office}
     \begin{itemize}
-      \item Project grids on the surface of a cube onto a sphere
       \item Six logically rectangular grids (cannot be represented as a single structured grid)
       \item No pole-like singularity but some distortion where three tiles meet 
     \end{itemize}
@@ -140,7 +139,7 @@
 \end{frame}
 
 \begin{frame}[t]
-  \frametitle{Where interpolation is used}
+  \frametitle{Interpolation is required for}
   \begin{itemize}
    \item computing fluxes across an area
    \item advecting fields
