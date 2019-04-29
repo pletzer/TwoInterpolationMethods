@@ -94,17 +94,9 @@
 % The [<+-| alert@+>] will create a new slide for each element with highlighting 
 
 
-\BackgroundPicture{NeSI/divider-01.png}
-\begin{frame}[fragile]{}
-  \begin{center}
-    \Huge{\textbf{Motivation}}
-  \end{center}
-\end{frame}
-\BackgroundPicture{NeSI/blank-01.png}
-
 \begin{frame}[t]
-  \frametitle{Want answers to following questions}
-    \begin{block}{How should we interpolate vector fields with staggered components?}
+  \frametitle{Motivation: want answers to:}
+    \begin{block}{How to interpolate vector fields with staggered components?}
       \begin{itemize}%[<+-| alert@+>]
 	  \item Arakawa C/D grids
       \item Components are on cell faces or edges
@@ -119,13 +111,11 @@
 \end{frame}
 
 \begin{frame}[t]
-  \frametitle{}
-    \begin{block}{Can we unify existing interpolation methods?}
+  \frametitle{Currently used interpolation methods in earth sciences}
+    \begin{block}{Is there hope to unify these?}
       \begin{itemize}%[<+-| alert@+>]
 	  \item Linear, used since Babylonian times (2000-1700 BC)
-      \item Conservative or area weighted, used in climate studies to enforce conservation
-      \item In both cases the interpolation weights are ratios of areas (volumes)
-      \item Should vector fields with staggered components use bilinear or conservative? Or something else?
+      \item Conservative or area weighted, used in climate studies to enforce conservation of total mass, energy
     \end{itemize}
   \end{block}
   \begin{tabular}{lr}
@@ -136,43 +126,36 @@
 \end{frame}
 
 \begin{frame}[t]
-  \frametitle{}
-  \begin{block}{How to handle curvilinear grids with non-orthogonal cells?}
-  \end{block}
+  \frametitle{Earth science grids are curvilinear}
+  \begin{block}{How to handle non-orthogonal cells?}
     Example: cubed-sphere grid
     \begin{itemize}
       \item Project grids on the surface of a cube onto a sphere
       \item Six logically rectangular grids (cannot be represented as a single structured grid)
       \item No pole-like singularity but some distortion where three tiles meet 
     \end{itemize}
+  \end{block}
   \begin{center}
     \includegraphics[width=0.35\textwidth]{cubedSphere.png}
   \end{center}
 \end{frame}
 
 \begin{frame}[t]
-  \frametitle{}
-  \begin{block}{How to compute surface fluxes?}
-  \end{block}
-  For example compute water fluxes across area
+  \frametitle{Interpolation is needed to:}
+  \begin{itemize}
+   \item compute fluxes across area
+   \item advect fields
+   \item determine statistical properties in given regions
+  \end{itemize}
   \begin{center}
     \includegraphics[width=0.6\textwidth]{fluxIntegral.png}
   \end{center}
   
 \end{frame}
 
-%\subsection{Divider examples}
-\BackgroundPicture{NeSI/divider-02.png}
-\begin{frame}[fragile]{}
-  \begin{center}
-    \Huge{\textbf{The type of field determines the discretization}}
-  \end{center}
-\end{frame}
-\BackgroundPicture{NeSI/blank-01.png}
-
 \begin{frame}[t]
-  \frametitle{Why four types of fields?}
-    \begin{block}{One derivative - 4 fields }
+  \frametitle{Four types of fields - one derivative}
+    \begin{block}{Exterior calculus tells us:}
       \begin{itemize}%[<+-| alert@+>]
 	  \item {\color{red} 0-form}: just a function of space, one component
         \begin{itemize}
@@ -181,11 +164,11 @@
         \end{itemize}
       \item {\color{red} 1-form}: vector field, 3 components in 3D
         \begin{itemize}
-          \item Examples: electric field $E$ and induction $H$
+          \item Examples: electric field $E$, induction $H$ and velocity
         \end{itemize}
       \item {\color{red} 2-form}: pseudo-vector field, 3 components in 3D
          \begin{itemize}
-          \item Examples: magnetic field $B$ and displacement field $D$
+          \item Examples: magnetic field $B$, displacement field $D$ and vorticity
         \end{itemize}
    \item {\color{red} 3-form}: pseudo-scalar, 1 component
          \begin{itemize}
@@ -196,7 +179,7 @@
 \end{frame}
 
 \begin{frame}[t]
-  \frametitle{Discretized versions of the fields}
+  \frametitle{Discretized fields corresponding to the 1-3 forms}
     \begin{block}{Association of form with cell elements}
       \begin{itemize}%[<+-| alert@+>]
 	  \item 0-form: {\color{red} on nodes}
@@ -221,15 +204,6 @@
   \end{block}
 \end{frame}
 
-%\subsection{Divider examples}
-\BackgroundPicture{NeSI/divider-04.png}
-\begin{frame}[fragile]{}
-  \begin{center}
-    \Huge{\textbf{Interpolation}}
-  \end{center}
-\end{frame}
-\BackgroundPicture{NeSI/blank-01.png}
-
 \begin{frame}[fragile]{Generalizing ``interpolation''}
 \begin{block}{Making interpolation work for nodal, edge, face and cell fields}
 $\int f = \sum_i f_i \int_T \phi_i$
@@ -237,69 +211,38 @@ $\int f = \sum_i f_i \int_T \phi_i$
 \item $\phi_i$ is basis $k$-form, $k =$ 0, 1, 2 or 3
 \item $T$ is target (point, line, area or volume)
 \item $f_i$ is field integral over cell element $k$ (node, edge, face or cell)
-\item $\int_T \phi_i$ is the interpolation weight
+\item $\int_T \phi_i$ is the {\color{red} interpolation weight}
 \item $i$ index runs over all the degrees of freedom (points, edges, faces etc., as appropriate)
 \end{itemize}
 \end{block}
 \end{frame}
 
-\begin{frame}[fragile]{Want the basis functions to satisfy orthogonality condition}
+\begin{frame}[fragile]{Basis functions satisfy orthogonality condition}
 
 \begin{block}{$\int_i \phi_j = \delta_{ij}$}
- \begin{itemize}
-   \item $i$ is cell element (node, edge, face, cell)
-   \item $j$ is basis function index
-   \item nodal bases are zero on all nodes expect one where it is one
-   \item edge bases have zero integral on all edges except itself where it is one
-   \item face bases have zero integral on all faces except itself where it is one
- \end{itemize}
+   $i$ is cell element (node, edge, face, cell), $j$ is basis function index
  \end{block}
-
-\end{frame}
-
-
-\begin{frame}[fragile]{Observe how the $k = 1, 2$ bases satisfy the orthogonality condition}
-
   \begin{tabular}{lr}
       \includegraphics[width=50mm]{hexEdge.png} &                        \includegraphics[width=50mm]{hexFace.png} \\
       {Edge basis is perpendicular } & {Face basis is tangent }  \\
       {to neighbouring edges} & {to neighbouring faces}
 \end{tabular}
 
-
-%\centering
-%\includegraphics[width=0.3\textwidth]{hexFace.png}
-% 2-form basis vanishes on opposite face and is tangent to incident faces
-% \end{block}
 \end{frame}
-
-%\subsection{Divider examples}
-\BackgroundPicture{NeSI/divider-04.png}
-\begin{frame}[fragile]{}
-  \begin{center}
-    \Huge{\textbf{Results}}
-  \end{center}
-\end{frame}
-\BackgroundPicture{NeSI/blank-01.png}
 
 \begin{frame}[t]
-  \frametitle{Divergence-free field in Cartesian coordinates}
+  \frametitle{Result 1: divergence-free field  $v = dz \wedge d\psi$}
   \begin{block}{Flux integral depends only on distance of endpoints to nearest grid node}
   \end{block}
-  \begin{itemize}
-  \item $v = dz \wedge d\psi$
-  with stream function $\psi = \frac{\cos 2 \pi x}{4 \pi} + y^2$
-  \item Closed surface fluxes $B$ and $C$ are exact 
-  \end{itemize}
-  \begin{center}
-    \includegraphics[width=.7\linewidth]{flow.png}
-  \end{center}
+  \begin{tabular}{c}
+    \includegraphics[width=.7\linewidth]{flow.png} \\
+    Closed loop integral is exact!
+  \end{tabular}
 \end{frame}
 
 \begin{frame}[t]
-  \frametitle{Vector field with singularity}
+  \frametitle{Result 2: vector field $v = \frac{x dx + y dy}{2 \pi (x^2 + y^2)}$ with singularity}
   \begin{block}{Numerical loop integral A gives 0, B gives 1}
-   $v = \frac{x dx + y dy}{2 \pi (x^2 + y^2)}$
   \end{block}
   \begin{center}
     \includegraphics[width=.5\linewidth]{polar.png}
@@ -307,8 +250,8 @@ $\int f = \sum_i f_i \int_T \phi_i$
 \end{frame}
 
 \begin{frame}[t]
-  \frametitle{Flux computation on the cubed sphere $v = d\psi \wedge dr$}
-  \begin{block}{Mimetic interpolation works for highly distorted cells}
+  \frametitle{Result 3: flux on the cubed sphere $v = d\psi \wedge dr$}
+  \begin{block}{Edge/face interpolation works for highly distorted cells}
   \end{block}
   
   \begin{tabular}{lr}
@@ -318,16 +261,8 @@ $\int f = \sum_i f_i \int_T \phi_i$
   \end{tabular}
 \end{frame}
 
-\BackgroundPicture{NeSI/divider-02.png}
-\begin{frame}[fragile]{}
-  \begin{center}
-    \Huge{\textbf{Summary}}
-  \end{center}
-\end{frame}
-\BackgroundPicture{NeSI/blank-01.png}
-
 \begin{frame}[t]
-  \frametitle{}
+  \frametitle{Summary}
     \begin{block}{Different types of field $\leftrightarrow$ different staggerings}
       \begin{itemize}%[<+-| alert@+>]
 	  \item nodal for scalar fields (e.g. temperature)
@@ -344,7 +279,7 @@ $\int f = \sum_i f_i \int_T \phi_i$
 \end{frame}
 
 \begin{frame}[t]
-  \frametitle{Basis function extensions}
+  \frametitle{Summary (2)}
     \begin{block}{What about tetrahedra?}
       Similar approach except that the basis functions are Whitney's
     \end{block}
@@ -353,21 +288,9 @@ $\int f = \sum_i f_i \int_T \phi_i$
     on sub-cell edges, faces and cells. Quadratic elements effectively 
      split each cell into 8 sub-cells, each face into 4 sub-faces and each edge into 2 sub-edges. 
   \end{block}
-\end{frame}
-
-% End <-----------------------------------------------------------------------------------------
-\BackgroundPicture{NeSI/blank-02.png}
-\begin{frame}[plain]
-  \begin{center}
-  Goal is to apply the rigour of dynamical cores to pre- and post-processing tools. Overtime we expect the distinction between dynamical core
-  and pre-/post-processing to diminish.
-  \\
-  
-    \vspace*{+2cm}
-    {\Huge Thank You}\\
-    \vspace*{+1cm}
-    \includegraphics[width=100pt]{NeSI/nesi_logo.png}
-  \end{center}
+    \begin{block}{The time is ripe to treat interpolation with same rigour as modelling}
+    	``Mimetic Interpolation of Vector Fields on Arakawa C/D Grids'': https://journals.ametsoc.org/doi/10.1175/MWR-D-18-0146.1
+  \end{block}
 \end{frame}
 
 \end{document} 
