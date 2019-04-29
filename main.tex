@@ -95,7 +95,7 @@
 
 
 \begin{frame}[t]
-  \frametitle{Motivation: want answers to:}
+  \frametitle{Motivation: want answers to}
     \begin{block}{How to interpolate vector fields with staggered components?}
       \begin{itemize}%[<+-| alert@+>]
 	  \item Arakawa C/D grids
@@ -114,21 +114,20 @@
   \frametitle{Currently used interpolation methods in earth sciences}
     \begin{block}{Is there hope to unify these?}
       \begin{itemize}%[<+-| alert@+>]
-	  \item Linear, used since Babylonian times (2000-1700 BC)
+	  \item Linear
       \item Conservative or area weighted, used in climate studies to enforce conservation of total mass, energy
     \end{itemize}
   \end{block}
-  \begin{tabular}{lr}
+  \begin{tabular}{lcr}
       % after \\: \hline or \cline{col1-col2} \cline{col3-col4} ...
-      \includegraphics[width=30mm]{bilinear.png} &               \includegraphics[width=30mm]{conservative.png} \\
-      {Bilinear} & {Conservative}  
+      \includegraphics[width=30mm]{babylonianTablet.jpeg} & \includegraphics[width=30mm]{bilinear.png} & \includegraphics[width=30mm]{conservative.png} \\
+      {Babylonian tablet (1700BC)} & {Bilinear} & {Conservative (used since the 1990s)}  
 \end{tabular}
 \end{frame}
 
 \begin{frame}[t]
   \frametitle{Earth science grids are curvilinear}
-  \begin{block}{How to handle non-orthogonal cells?}
-    Example: cubed-sphere grid
+  \begin{block}{How to handle non-orthogonal cells? Example: cubed-sphere grid}
     \begin{itemize}
       \item Project grids on the surface of a cube onto a sphere
       \item Six logically rectangular grids (cannot be represented as a single structured grid)
@@ -141,16 +140,16 @@
 \end{frame}
 
 \begin{frame}[t]
-  \frametitle{Interpolation is needed to:}
+  \frametitle{Where interpolation is used}
   \begin{itemize}
-   \item compute fluxes across area
-   \item advect fields
-   \item determine statistical properties in given regions
+   \item computing fluxes across an area
+   \item advecting fields
+   \item visualising streamlines
   \end{itemize}
-  \begin{center}
-    \includegraphics[width=0.6\textwidth]{fluxIntegral.png}
-  \end{center}
-  
+    \begin{tabular}{lr}
+      \includegraphics[width=50mm]{fluxIntegral.png} & 
+      \includegraphics[width=50mm]{streamLineError.png} 
+    \end{tabular}  
 \end{frame}
 
 \begin{frame}[t]
@@ -265,12 +264,10 @@ $\int f = \sum_i f_i \int_T \phi_i$
   \frametitle{Summary}
     \begin{block}{Different types of field $\leftrightarrow$ different staggerings}
       \begin{itemize}%[<+-| alert@+>]
-	  \item nodal for scalar fields (e.g. temperature)
-	  \item edge for vector fields (e.g. electric field, velocity)
-	  \item face for pseudo-vector fields (e.g velocity)
-	  \item cell for pseudo-scalar fields (e.g. density)
-	  \item type of field $\rightarrow$ interpolation method
-      \item field values set via cell, face and edge integrals (instead of vector field components)
+	  \item use bilinear for nodal (scalar) field
+	  \item use {\color{red} edge} for vector field
+	  \item use {\color{red} face} for pseudo-vector field
+	  \item use cell for pseudo-scalar fields
     \end{itemize}
     \end{block}
     \begin{block}{Masking and partially valid cells?}
@@ -288,7 +285,7 @@ $\int f = \sum_i f_i \int_T \phi_i$
     on sub-cell edges, faces and cells. Quadratic elements effectively 
      split each cell into 8 sub-cells, each face into 4 sub-faces and each edge into 2 sub-edges. 
   \end{block}
-    \begin{block}{The time is ripe to treat interpolation with same rigour as modelling}
+    \begin{block}{The time is ripe to treat interpolation with the same rigour as modelling}
     	``Mimetic Interpolation of Vector Fields on Arakawa C/D Grids'': https://journals.ametsoc.org/doi/10.1175/MWR-D-18-0146.1
   \end{block}
 \end{frame}
