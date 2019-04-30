@@ -153,54 +153,24 @@
 \end{frame}
 
 \begin{frame}[t]
-  \frametitle{Four types of fields - one derivative}
-    \begin{block}{Exterior calculus tells us:}
-      \begin{itemize}%[<+-| alert@+>]
-	  \item {\color{red} 0-form}: just a function of space, one component
-        \begin{itemize}
-          \item invariant under coordinate change
-          \item Example: temperature
-        \end{itemize}
-      \item {\color{red} 1-form}: vector field, 3 components in 3D
-        \begin{itemize}
-          \item Examples: electric field $E$, induction $H$ and velocity
-        \end{itemize}
-      \item {\color{red} 2-form}: pseudo-vector field, 3 components in 3D
-         \begin{itemize}
-          \item Examples: magnetic field $B$, displacement field $D$ and vorticity
-        \end{itemize}
-   \item {\color{red} 3-form}: pseudo-scalar, 1 component
-         \begin{itemize}
-          \item Example: density
-        \end{itemize}
-    \end{itemize}
-  \end{block}
-\end{frame}
+  \frametitle{Four types of fields - four types of interpolation methods}
+  \begin{block}{Type of field determines staggering and interpolation method}
+  \begin{itemize}
+  	\item``Correct'' discretisation ensures that mimetic properties such as $\nabla \times \nabla = \nabla \cdot \nabla \times = 0$ are satisfied
+  	\item ``Correct'' interpolation ensures conservation of line, surface and volume integrals (as appropriate)
+  \end{itemize}
+\end{block}
+\begin{tabular} {|r|c|c|c|c|l|}
+\hline
+{\color{blue} field type}                 &  num.comp. & example         & staggering       & target  & {\color{blue} method}  \\
+\hline
+{\color{blue} scalar}                     &       1         & temperature     & nodal            &   point  & {\color{blue} bilinear} \\
+{\color{magenta} vector}        &       {\color{red} 3}         & {\color{red} velocity}        & {\color{red} edges/Arakawa D} &  {\color{red} line}    & {\color{magenta} this talk} \\
+{\color{magenta} pseudo-vector} &       {\color{red} 3}         & {\color{red} magnetic field}  & {\color{red} faces/Arakawa C}  &  {\color{red} surface} & {\color{magenta} this talk} \\
+{\color{blue} pseudo-scalar}              &       1         & mass density    & cell centred     &  volume  & {\color{blue} conservative} \\
+\hline
+\end{tabular}
 
-\begin{frame}[t]
-  \frametitle{Discretized fields corresponding to the 1-3 forms}
-    \begin{block}{Association of form with cell elements}
-      \begin{itemize}%[<+-| alert@+>]
-	  \item 0-form: {\color{red} on nodes}
-        \begin{itemize}
-          \item $\int \alpha = \alpha$ (integral is a no op)
-        \end{itemize}
-      \item 1-form: {\color{red} on edges}
-        \begin{itemize}
-          \item $\int \beta$ is a line integral
-        \end{itemize}
-      \item 2-form: {\color{red} on faces}
-        \begin{itemize}
-          \item $\int \gamma$ is a surface integral
-        \end{itemize}
-      \item 3-form: {\color{red} cell centred}
-        \begin{itemize}
-          \item $\int \omega$ is a volume integral
-        \end{itemize}
-    \end{itemize}
-  \end{block}
-  \begin{block}{Differential forms like to be integrated}
-  \end{block}
 \end{frame}
 
 \begin{frame}[fragile]{Generalizing ``interpolation'' to work for nodal, edge, face and cell fields}
