@@ -141,13 +141,14 @@
 \begin{frame}[t]
   \frametitle{Interpolation is required for}
   \begin{itemize}
+   \item regridding/remapping fields deom one grid to another
    \item computing fluxes across an area
    \item advecting fields
    \item visualising streamlines
   \end{itemize}
     \begin{tabular}{lr}
-      \includegraphics[width=50mm]{fluxIntegral.png} & 
-      \includegraphics[width=50mm]{streamLineError.png} 
+      \includegraphics[width=40mm]{fluxIntegral.png} & 
+      \includegraphics[width=40mm]{streamLineError.png} 
     \end{tabular}  
 \end{frame}
 
@@ -202,20 +203,20 @@
   \end{block}
 \end{frame}
 
-\begin{frame}[fragile]{Generalizing ``interpolation''}
-\begin{block}{Making interpolation work for nodal, edge, face and cell fields}
-$\int f = \sum_i f_i \int_T \phi_i$
+\begin{frame}[fragile]{Generalizing ``interpolation'' to work for nodal, edge, face and cell fields}
+\begin{block}{One formula for all cases}
+$\int f = \sum_i {\color{cyan} f_i} \int_{\color{red} T} {\color{blue} \phi_i}$
 \begin{itemize}
-\item $\phi_i$ is basis $k$-form, $k =$ 0, 1, 2 or 3
-\item $T$ is target (point, line, area or volume)
-\item $f_i$ is field integral over cell element $k$ (node, edge, face or cell)
-\item $\int_T \phi_i$ is the {\color{red} interpolation weight}
+\item {\color{blue} $\phi_i$} is \textbf{basis} $k$-form, $k =$ 0, 1, 2 or 3
+\item {\color{red} $T$} is \textbf{target} (point, line, area or volume)
+\item ${\color{cyan} f_i}$ is \textbf{field integral} over cell element $k$ (node, edge, face or cell)
+\item $\int_T \phi_i \equiv$ \textbf{interpolation weight}
 \item $i$ index runs over all the degrees of freedom (points, edges, faces etc., as appropriate)
 \end{itemize}
 \end{block}
 \end{frame}
 
-\begin{frame}[fragile]{Basis functions satisfy orthogonality condition}
+\begin{frame}[fragile]{Basis functions $\phi_j$ satisfy orthogonality condition}
 
 \begin{block}{$\int_i \phi_j = \delta_{ij}$}
    $i$ is cell element (node, edge, face, cell), $j$ is basis function index
@@ -239,9 +240,16 @@ $\int f = \sum_i f_i \int_T \phi_i$
 \end{frame}
 
 \begin{frame}[t]
-  \frametitle{Result 2: vector field $v = \frac{x dx + y dy}{2 \pi (x^2 + y^2)}$ with singularity}
-  \begin{block}{Numerical loop integral A gives 0, B gives 1}
+  \frametitle{Result 2: Singular, polar vector field $v = \frac{x dx + y dy}{2 \pi (x^2 + y^2)}$}
+  \begin{block}{Loop integral is 1 if singularity is inside contour, 0 otherwise. Getting exact 0 for $E0$ and $E1$, exact 1 for $E6$-$E9$ and in between values for contours that intersect the cell containing (0,0)}
   \end{block}
+  \begin{tabular}{lr}
+  \includegraphics[width=50mm]{polar.png} & 
+  \includegraphics[width=80mm]{polarFluxes.png}
+  \end{tabular}
+
+
+
   \begin{center}
     \includegraphics[width=.5\linewidth]{polar.png}
   \end{center}
@@ -249,7 +257,7 @@ $\int f = \sum_i f_i \int_T \phi_i$
 
 \begin{frame}[t]
   \frametitle{Result 3: flux on the cubed sphere $v = d\psi \wedge dr$}
-  \begin{block}{Edge/face interpolation works for highly distorted cells}
+  \begin{block}{Edge/face interpolation works for highly distorted cells. Zero error start/end points fall onto grid nodes.}
   \end{block}
   
   \begin{tabular}{lr}
@@ -261,12 +269,12 @@ $\int f = \sum_i f_i \int_T \phi_i$
 
 \begin{frame}[t]
   \frametitle{Summary}
-    \begin{block}{Different types of field $\leftrightarrow$ different staggerings}
+    \begin{block}{Type of field $\rightarrow$ discretised field staggering $\rightarrow$ basis functions $\rightarrow$ interpolation method}
       \begin{itemize}%[<+-| alert@+>]
 	  \item use bilinear for nodal (scalar) field
-	  \item use {\color{red} edge} for vector field
-	  \item use {\color{red} face} for pseudo-vector field
-	  \item use cell for pseudo-scalar fields
+	  \item use {\color{red} edge} for vector field - conserves line integrals
+	  \item use {\color{red} face} for pseudo-vector field - conserves flux integrals
+	  \item use cell for pseudo-scalar fields - conserves volume integrals
     \end{itemize}
     \end{block}
     \begin{block}{Masking and partially valid cells?}
@@ -277,7 +285,7 @@ $\int f = \sum_i f_i \int_T \phi_i$
 \begin{frame}[t]
   \frametitle{Summary (2)}
     \begin{block}{What about tetrahedra?}
-      Similar approach except that the basis functions are Whitney's
+      Similar approach except that the basis functions are Whitney's bases (1957)
     \end{block}
     \begin{block}{Higher order basis functions?}
     Initial work indicates that higher order basis functions can be used. These also satisfy the orthogonality condition $\int_i \phi_j = \delta_{ij}$
