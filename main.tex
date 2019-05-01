@@ -242,9 +242,9 @@ $\int f = \sum_i {\color{cyan} f_i} \int_{\color{red} T} {\color{blue} \phi_i}$
     \begin{block}{Type of field $\rightarrow$ discretised field staggering $\rightarrow$ basis functions $\rightarrow$ interpolation method}
       \begin{itemize}%[<+-| alert@+>]
 	  \item use bilinear for nodal (scalar) field
-	  \item use {\color{red} edge} for vector field - conserves line integrals
-	  \item use {\color{red} face} for pseudo-vector field - conserves flux integrals
-	  \item use cell for pseudo-scalar fields - conserves volume integrals
+	  \item use {\color{red} edge} for vector field - conserves line integrals (e.g. voltage)
+	  \item use {\color{red} face} for pseudo-vector field - conserves flux integrals (magnetic flux)
+	  \item use cell for pseudo-scalar fields - conserves volume integrals (total mass)
     \end{itemize}
     \end{block}
     \begin{block}{Masking and partially valid cells?}
